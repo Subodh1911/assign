@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 
 const AdminDashboard = ({
+  handleDelete,
   allusers,
  setUsers,
   users,
@@ -38,12 +39,8 @@ const AdminDashboard = ({
     setUsers(updatedUsers);
     setEditableRowId(null);
   }
-  const handleDelete = rowId => {
-    const updatedUsers = users.filter(user => user.id !== rowId  );
-    setUsers(updatedUsers); // Update the users state to reflect the deletion
-    console.log(users)
-    onDeleteSelected([rowId]);
-  };
+
+
 
   const handlePageChange = page => {
     onPageChange(page);
@@ -67,7 +64,7 @@ const AdminDashboard = ({
     } else {
       // Select all rows if "Select All" is not checked
       for (const rowId of idsOnCurrentPage) {
-        await onSelectRow(rowId);
+         onSelectRow(rowId);
       }
     }
     // Toggle the state of "Select All" checkbox
@@ -130,10 +127,14 @@ const AdminDashboard = ({
                   </button>
                 ) : (
                   <>
-                    <button className="edit" onClick={() => handleEdit(user.id)}>
+                    <button className="edit" onClick={() => handleEdit(user.id, user.name, user.email, user.role)}>
                       Edit
                     </button>
-                    <button className="delete" onClick={() => handleDelete(user.id)}>
+                    
+                    <button className="delete" onClick={() => {
+                      onSelectRow(user.id);
+                      handleDelete();
+                    }}>
                       Delete
                     </button>
                   </>
@@ -146,7 +147,12 @@ const AdminDashboard = ({
       <div>
         <button onClick={() => handlePageChange(1)}>&lt;&lt; First</button>
         <button onClick={() => handlePageChange(currentPage - 1)}>&lt; Previous</button>
-        <span>{`Page ${currentPage}`}</span>
+        {/* <span>{`Page ${currentPage}`}</span> */}
+        <button onClick={() => handlePageChange(1)}>1;</button>
+        <button onClick={() => handlePageChange(1 + 1)}>2</button>
+        <button onClick={() => handlePageChange(2 + 1)}>3</button>
+        <button onClick={() => handlePageChange(3 + 1)}>4</button>
+        <button onClick={() => handlePageChange(4 + 1)}>5</button>
         <button onClick={() => handlePageChange(currentPage + 1)}>Next &gt;</button>
         <button onClick={() => handlePageChange(Math.ceil(allusers.length/itemsPerPage ))}>
           Last &gt;&gt;
