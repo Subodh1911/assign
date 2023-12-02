@@ -10,7 +10,6 @@ function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState('');
-  const [len, setLen] = useState(0);
   useEffect(() => {
   // Fetch data from the API endpoint
     fetch('https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json')
@@ -21,10 +20,6 @@ function App() {
       })
       .catch(error => console.error('Error fetching data:', error));
     }, []);
-    useEffect(() => {
-        setLen(users.length)
-        }, []);
-    console.log("len is " + len )
   // Handle search
   useEffect(() => {
     const filteredResults = users.filter(user =>
@@ -35,6 +30,11 @@ function App() {
     setFilteredUsers(filteredResults);
     setCurrentPage(1); // Reset to the first page after a new search
   }, [searchTerm, users]);
+  // const handleDeleteSelected = () => {
+  //   const updatedUsers = users.filter(user => !selectedRows.includes(user.id));
+  //   setUsers(updatedUsers);
+  //   setSelectedRows([]);
+  // };
 
   // Calculate current items to display on the current page
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -46,7 +46,6 @@ function App() {
   return (
     <div className="App">
       <AdminDashboard
-        len={len}
         users={currentItems}
         setUsers={setUsers}
         selectedRows={selectedRows}
