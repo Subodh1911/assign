@@ -41,13 +41,19 @@ function App() {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredUsers.slice(indexOfFirstItem, indexOfLastItem);
   // Handle pagination
-  const paginate = page => setCurrentPage(page);
+  // const paginate = page => setCurrentPage(page > Math.ceil(users.length/itemsPerPage) ? Math.ceil(users.length/itemsPerPage) : page);
+  const paginate = (page)=> {
+    if(page<1) { setCurrentPage(1); }
+    else if(page>Math.ceil(users.length/itemsPerPage)) { setCurrentPage(Math.ceil(users.length/itemsPerPage)); }
+    else { setCurrentPage(page); }
+  }
 
   return (
     <div className="App">
       <AdminDashboard
         len={len}
         users={currentItems}
+        allusers = {users}
         setUsers={setUsers}
         selectedRows={selectedRows}
         searchTerm={searchTerm}
