@@ -127,20 +127,18 @@ const AdminDashboard = ({
                /> : user.role}</td>
               <td>
                 {editableRowId === user.id ? (
-                  <button className="save"  onClick={() => handleSave(user.id)}>
-                    <img src={save} style={{ width: '30px', height: '30px' }} alt="save" />
-                  </button>
+                  
+                    <img src={save} style={{ mouse:'cursor', width: '30px', height: '30px' }} alt="save" onClick={() => handleSave(user.id)} />
+                 
                 ) : (
                   <>
-                    <button className="edit" onClick={() => handleEdit(user.id, user.name, user.email, user.role)}>
-                    <img src={edit} style={{ width: '20px', height: '20px' }} alt="edit" />
-                    </button>
-                    <button className="delete" onClick={() => {
+             <img src={edit} style={{ width: '30px', height: '30px', cursor: 'pointer' }} alt="edit"
+              onClick={() => handleEdit(user.id, user.name, user.email, user.role)}/>
+
+                    <img src={del} style={{ width: '30px', height: '30px'}} alt="del" onClick={() => {
                       onSelectRow(user.id);
                       handleDelete();
-                    }}>
-                       <img src={del} style={{ width: '20px', height: '20px' }} alt="del" />
-                    </button>
+                    }} />
                   </>
                 )}
               </td>
@@ -149,23 +147,61 @@ const AdminDashboard = ({
         </tbody>
       </table>
       <div>
-        <button style={{ borderRadius: '15%',width: '40px',height: '40px',}} onClick={() => handlePageChange(1)}> <img src={home} style={{ width: '20px', height: '20px' }} alt="home" /></button>
-        <button style={{ borderRadius: '15%',width: '40px',height: '40px',}} onClick={() => handlePageChange(currentPage - 1)}> <img src={prev} style={{ width: '20px', height: '20px' }} alt="prev" /></button>
-        {/* <span>{`Page ${currentPage}`}</span> */}
-        <button style={{ borderRadius: '15%',width: '40px',height: '40px',}} onClick={() => handlePageChange(1)}>1</button>
+  <img
+    src={home}
+    style={{
+      width: '40px',
+      height: '40px',
+      borderRadius: '15%',
+      cursor: 'pointer',
+    }}
+    alt="home"
+    onClick={() => handlePageChange(1)}
+  />
+  <img
+    src={prev}
+    style={{
+      width: '40px',
+      height: '40px',
+      borderRadius: '15%',
+      cursor: 'pointer',
+    }}
+    alt="prev"
+    onClick={() => handlePageChange(currentPage - 1)}
+    disabled={currentPage === 1}
+  />
+       <button style={{ borderRadius: '15%',width: '40px',height: '40px',}} onClick={() => handlePageChange(1)}>1</button>
         <button style={{ borderRadius: '15%',width: '40px',height: '40px',}} onClick={() => handlePageChange(1 + 1)}>2</button>
         <button style={{ borderRadius: '15%',width: '40px',height: '40px',}} onClick={() => handlePageChange(2 + 1)}>3</button>
         <button style={{ borderRadius: '15%',width: '40px',height: '40px',}} onClick={() => handlePageChange(3 + 1)}>4</button>
         <button style={{ borderRadius: '15%',width: '40px',height: '40px',}} onClick={() => handlePageChange(4 + 1)}>5</button>
-        <button style={{ borderRadius: '15%',width: '40px',height: '40px',}} onClick={() => handlePageChange(currentPage + 1)}><img src={next} style={{ width: '20px', height: '20px' }} alt="next" /></button>
-        <button style={{ borderRadius: '15%',width: '40px',height: '40px',}} onClick={() => handlePageChange(Math.ceil(allusers.length/itemsPerPage ))}>
-        <img src={last} style={{ width: '20px', height: '20px' }} alt="last" />;
-        </button>
-      </div>
-      <button   style={{ borderRadius: '15%',width: '40px',height: '40px', position: 'absolute',
-    top: 3,right: 67}} onClick={onDeleteSelected} className="delete-selected">
-      <img src={dele} style={{ width: '20px', height: '20px' }} alt="dele" />
-      </button>
+  <img
+    src={next}
+    style={{
+      width: '40px',
+      height: '40px',
+      borderRadius: '15%',
+      cursor: 'pointer',
+    }}
+    alt="next"
+    onClick={() => handlePageChange(currentPage + 1)}
+    disabled={currentPage === Math.ceil(allusers.length / itemsPerPage)}
+  />
+  <img
+    src={last}
+    style={{
+      width: '40px',
+      height: '40px',
+      borderRadius: '15%',
+      cursor: 'pointer',
+    }}
+    alt="last"
+    onClick={() => handlePageChange(Math.ceil(allusers.length / itemsPerPage))}
+  />
+</div>
+
+      <img src={dele}  style={{ borderRadius: '15%',width: '40px',height: '40px', position: 'absolute',
+    top: 3,right: 67}} onClick={onDeleteSelected}  alt="dele" />
        {/* Footer */}
        <div style={{ position: 'relative', marginTop: '20px', borderTop: '1px solid #ccc' }}>
         <span style={{ position: 'absolute', bottom: '40px', right: '10px' }}>
