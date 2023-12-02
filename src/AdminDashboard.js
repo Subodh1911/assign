@@ -11,9 +11,9 @@ import edit from './img/edit.png'
 import React, { useState, useEffect } from 'react';
 
 const AdminDashboard = ({
-  handleDelete,
- allusers,
- setUsers,
+  setSelectedRows,
+  allusers,
+  setUsers,
   users,
   selectedRows,
   searchTerm,
@@ -48,14 +48,21 @@ const AdminDashboard = ({
     setUsers(updatedUsers);
     setEditableRowId(null);
   }
-
+  const handleDelete = (rowId) => {
+    const updatedUsers = allusers.filter(user => user.id !== rowId);
+    setUsers(updatedUsers);
+  };
   const handlePageChange = page => {
+    setSelectedRows([]);
     onPageChange(page);
+  
   };
   useEffect(() => {
     // Update the state of "Select All" checkbox when all rows on the current page are selected
     setSelectAllChecked(selectedRows.length === itemsPerPage);
   }, [selectedRows, itemsPerPage]);
+
+
   const handleSelectAll = async () => {
     const idsOnCurrentPage = users
       .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
@@ -63,7 +70,7 @@ const AdminDashboard = ({
    for (const rowId of idsOnCurrentPage) {
     if (selectAllChecked) {
       // Deselect the row if "Select All" is checked
-      await onDeselectRow(rowId);
+        await onDeselectRow(rowId);
     } else {
       // Select the row if "Select All" is not checked
       if (!selectedRows.includes(rowId)) {
@@ -71,10 +78,40 @@ const AdminDashboard = ({
       }
     }
   }
-    // Toggle the state of "Select All" checkbox
-    setSelectAllChecked(!selectAllChecked);
-     console.log(selectedRows)
+  const updatedSelectedRows = selectAllChecked
+  ? selectedRows.filter(rowId => !idsOnCurrentPage.includes(rowId))
+  : [...selectedRows, ...idsOnCurrentPage];
+
+setSelectAllChecked(!selectAllChecked);
+setSelectedRows(updatedSelectedRows);
+console.log(selectedRows);
   };
+
+  const totalPages = Math.ceil(allusers.length / itemsPerPage);
+const buttons = [];
+for (let i = 1; i !== totalPages + 1; i++) {
+  buttons.push(
+    <button
+        key={i}
+      style={{
+        borderRadius: '15%',
+        width: '40px',
+        height: '40px',
+        backgroundColor: '#3498db',
+        color: '#fff',
+        border: '1px solid #3498db',
+        cursor: 'pointer',
+        fontWeight: 'bold',
+        boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.1)',
+        transition: 'background-color 0.3s, transform 0.2s'
+      }}
+      onClick={() => handlePageChange(i)}
+    >
+      {i}
+    </button>
+  )
+};
+
   return (
     <div>
       <input
@@ -127,17 +164,14 @@ const AdminDashboard = ({
                /> : user.role}</td>
               <td>
                 {editableRowId === user.id ? (
-                  
                     <img src={save} style={{ mouse:'cursor', width: '30px', height: '30px' }} alt="save" onClick={() => handleSave(user.id)} />
-                 
                 ) : (
                   <>
              <img src={edit} style={{ width: '30px', height: '30px', cursor: 'pointer' }} alt="edit"
               onClick={() => handleEdit(user.id, user.name, user.email, user.role)}/>
 
                     <img src={del} style={{ width: '30px', height: '30px'}} alt="del" onClick={() => {
-                      onSelectRow(user.id);
-                      handleDelete();
+                      handleDelete(user.id);
                     }} />
                   </>
                 )}
@@ -170,11 +204,23 @@ const AdminDashboard = ({
     onClick={() => handlePageChange(currentPage - 1)}
     disabled={currentPage === 1}
   />
-       <button style={{ borderRadius: '15%',width: '40px',height: '40px',}} onClick={() => handlePageChange(1)}>1</button>
+    {/* <button style={{ borderRadius: '15%',
+    width: '40px',
+    height: '40px',
+    backgroundColor: '#3498db',  // Set the background color
+    color: '#fff',  // Set the text color
+    border: '1px solid #3498db',  // Set the border color
+    cursor: 'pointer',  // Change cursor to pointer on hover
+    fontWeight: 'bold',  // Make the text bold
+    boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.1)',  // Add a subtle shadow
+    transition: 'background-color 0.3s, transform 0.2s'
+  }} onClick={() => handlePageChange(1)}>1</button>
         <button style={{ borderRadius: '15%',width: '40px',height: '40px',}} onClick={() => handlePageChange(1 + 1)}>2</button>
         <button style={{ borderRadius: '15%',width: '40px',height: '40px',}} onClick={() => handlePageChange(2 + 1)}>3</button>
         <button style={{ borderRadius: '15%',width: '40px',height: '40px',}} onClick={() => handlePageChange(3 + 1)}>4</button>
-        <button style={{ borderRadius: '15%',width: '40px',height: '40px',}} onClick={() => handlePageChange(4 + 1)}>5</button>
+        <button style={{ borderRadius: '15%',width: '40px',height: '40px',}} onClick={() => handlePageChange(4 + 1)}>5</button> */}
+
+  {buttons}
   <img
     src={next}
     style={{
