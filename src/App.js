@@ -36,7 +36,12 @@ function App() {
     setUsers(updatedUsers);
     setSelectedRows([]);
   };
-  
+  const handleDelete = (rowId) => {
+    // setSelectedRows(rowId);
+    const updatedUsers = users.filter(user => user.id!==rowId);
+    setUsers(updatedUsers);
+    // setSelectedRows([]);
+  };
 
   // Calculate current items to display on the current page
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -64,7 +69,9 @@ function App() {
         onDeselectRow={rowId =>
           setSelectedRows(selectedRows.filter(id => id !== rowId))
         }
+        handleDelete={handleDelete}
         onDeleteSelected={handleDeleteSelected}
+
         onPageChange={paginate}
         currentPage={currentPage}
         itemsPerPage={itemsPerPage}
