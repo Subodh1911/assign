@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 
 const AdminDashboard = ({
-  setUsers,
+ setUsers,
   users,
   selectedRows,
   searchTerm,
@@ -128,7 +128,8 @@ const AdminDashboard = ({
         <button onClick={() => handlePageChange(currentPage - 1)}>&lt; Previous</button>
         <span>{`Page ${currentPage}`}</span>
         <button onClick={() => handlePageChange(currentPage + 1)}>Next &gt;</button>
-        <button onClick={() => handlePageChange(Math.ceil(46/10))}>
+        <button onClick={() => handlePageChange(Math.ceil(46/10
+         ))}>
           Last &gt;&gt;
         </button>
       </div>
