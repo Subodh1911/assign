@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 
 const AdminDashboard = ({
+  allusers,
  setUsers,
   users,
   selectedRows,
@@ -14,16 +15,29 @@ const AdminDashboard = ({
   currentPage,
   itemsPerPage,
 }) => {
-  const [editableRowId, setEditableRowId] = useState(null);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
 
-  const handleEdit = rowId => {
+  const [editableRowId, setEditableRowId] = useState(null);
+  const [editedName, setEditedName] = useState('');
+  const [editedEmail, setEditedEmail] = useState('');
+  const [editedrole, setEditedrole] = useState('');
+  const handleEdit = (rowId, initialName,initialEmail,initialrole) => {
     setEditableRowId(rowId);
+    setEditedName(initialName);
+    setEditedEmail(initialEmail);
+    setEditedrole(initialrole)
   };
-
-  const handleSave = () => {
+  const handleSave = (rowId) => {
+    // Save the edited name and email, then reset editableRowId
+    // You may want to add validation checks for editedName and editedEmail
+    const updatedUsers = users.map(user =>
+      user.id === rowId
+        ? { ...user, name: editedName, email: editedEmail,role:editedrole }
+        : user
+    );
+    setUsers(updatedUsers);
     setEditableRowId(null);
-  };
+  }
   const handleDelete = rowId => {
     const updatedUsers = users.filter(user => user.id !== rowId  );
     setUsers(updatedUsers); // Update the users state to reflect the deletion
@@ -39,7 +53,7 @@ const AdminDashboard = ({
     // Update the state of "Select All" checkbox when all rows on the current page are selected
     setSelectAllChecked(selectedRows.length === itemsPerPage);
   }, [selectedRows, itemsPerPage]);
-  const handleSelectAll = async () => {
+  const handleSelectAll = async () => { 
     const idsOnCurrentPage = users
       .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
       .map(user => user.id);
@@ -100,12 +114,18 @@ const AdminDashboard = ({
                 />
               </td>
               <td>{user.id}</td>
-              <td>{editableRowId === user.id ? <input type="text" value={user.name} /> : user.name}</td>
-              <td>{user.email}</td>
-              <td>{user.role}</td>
+              <td>{editableRowId === user.id ? <input type="text" value={editedName}
+                onChange={(e) => setEditedName(e.target.value)}
+               /> : user.name}</td>
+               <td>{editableRowId === user.id ? <input type="text" value={editedEmail}
+                onChange={(e) => setEditedEmail(e.target.value)}
+               /> : user.email}</td>
+              <td>{editableRowId === user.id ? <input type="text" value={editedrole}
+                onChange={(e) => setEditedrole(e.target.value)}
+               /> : user.role}</td>
               <td>
                 {editableRowId === user.id ? (
-                  <button className="save" onClick={handleSave}>
+                  <button className="save" onClick={() => handleSave(user.id)}>
                     Save
                   </button>
                 ) : (
@@ -128,8 +148,7 @@ const AdminDashboard = ({
         <button onClick={() => handlePageChange(currentPage - 1)}>&lt; Previous</button>
         <span>{`Page ${currentPage}`}</span>
         <button onClick={() => handlePageChange(currentPage + 1)}>Next &gt;</button>
-        <button onClick={() => handlePageChange(Math.ceil(46/10
-         ))}>
+        <button onClick={() => handlePageChange(Math.ceil(allusers.length/itemsPerPage ))}>
           Last &gt;&gt;
         </button>
       </div>

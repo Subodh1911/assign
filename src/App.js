@@ -30,17 +30,20 @@ function App() {
     setFilteredUsers(filteredResults);
     setCurrentPage(1); // Reset to the first page after a new search
   }, [searchTerm, users]);
-  // const handleDeleteSelected = () => {
-  //   const updatedUsers = users.filter(user => !selectedRows.includes(user.id));
-  //   setUsers(updatedUsers);
-  //   setSelectedRows([]);
-  // };
+
+  const handleDeleteSelected = () => {
+    const updatedUsers = users.filter(user => !selectedRows.includes(user.id));
+    setUsers(updatedUsers);
+    setSelectedRows([]);
+  };
+  
 
   // Calculate current items to display on the current page
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredUsers.slice(indexOfFirstItem, indexOfLastItem);
   // Handle pagination
+
   // const paginate = page => setCurrentPage(page > Math.ceil(users.length/itemsPerPage) ? Math.ceil(users.length/itemsPerPage) : page);
   const paginate = (page)=> {
     if(page<1) { setCurrentPage(1); }
@@ -61,7 +64,7 @@ function App() {
         onDeselectRow={rowId =>
           setSelectedRows(selectedRows.filter(id => id !== rowId))
         }
-        onDeleteSelected={() => console.log('Deleting selected rows:', selectedRows)}
+        onDeleteSelected={handleDeleteSelected}
         onPageChange={paginate}
         currentPage={currentPage}
         itemsPerPage={itemsPerPage}
