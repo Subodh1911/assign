@@ -1,9 +1,18 @@
 // AdminDashboard.js
+
+import last from './img/last.png'
+import home from './img/home.png'
+import next from './img/next.png'
+import prev from './img/prev.png'
+import del from './img/del.png'
+import dele from './img/dele.png'
+import save from './img/save.png'
+import edit from './img/edit.png'
 import React, { useState, useEffect } from 'react';
 
 const AdminDashboard = ({
   handleDelete,
-  allusers,
+ allusers,
  setUsers,
   users,
   selectedRows,
@@ -40,35 +49,31 @@ const AdminDashboard = ({
     setEditableRowId(null);
   }
 
-
-
   const handlePageChange = page => {
     onPageChange(page);
   };
-
   useEffect(() => {
     // Update the state of "Select All" checkbox when all rows on the current page are selected
     setSelectAllChecked(selectedRows.length === itemsPerPage);
   }, [selectedRows, itemsPerPage]);
-  const handleSelectAll = async () => { 
+  const handleSelectAll = async () => {
     const idsOnCurrentPage = users
       .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
       .map(user => user.id);
-      console.log(idsOnCurrentPage)
-
+   for (const rowId of idsOnCurrentPage) {
     if (selectAllChecked) {
-      // Deselect all rows if "Select All" is checked
-      for (const rowId of idsOnCurrentPage) {
-        await onDeselectRow(rowId);
-      }
+      // Deselect the row if "Select All" is checked
+      await onDeselectRow(rowId);
     } else {
-      // Select all rows if "Select All" is not checked
-      for (const rowId of idsOnCurrentPage) {
-         onSelectRow(rowId);
+      // Select the row if "Select All" is not checked
+      if (!selectedRows.includes(rowId)) {
+        await onSelectRow(rowId);
       }
     }
+  }
     // Toggle the state of "Select All" checkbox
     setSelectAllChecked(!selectAllChecked);
+     console.log(selectedRows)
   };
   return (
     <div>
@@ -122,20 +127,19 @@ const AdminDashboard = ({
                /> : user.role}</td>
               <td>
                 {editableRowId === user.id ? (
-                  <button className="save" onClick={() => handleSave(user.id)}>
-                    Save
+                  <button className="save"  onClick={() => handleSave(user.id)}>
+                    <img src={save} style={{ width: '30px', height: '30px' }} alt="save" />
                   </button>
                 ) : (
                   <>
                     <button className="edit" onClick={() => handleEdit(user.id, user.name, user.email, user.role)}>
-                      Edit
+                    <img src={edit} style={{ width: '20px', height: '20px' }} alt="edit" />
                     </button>
-                    
                     <button className="delete" onClick={() => {
                       onSelectRow(user.id);
                       handleDelete();
                     }}>
-                      Delete
+                       <img src={del} style={{ width: '20px', height: '20px' }} alt="del" />
                     </button>
                   </>
                 )}
@@ -145,22 +149,29 @@ const AdminDashboard = ({
         </tbody>
       </table>
       <div>
-        <button onClick={() => handlePageChange(1)}>&lt;&lt; First</button>
-        <button onClick={() => handlePageChange(currentPage - 1)}>&lt; Previous</button>
+        <button style={{ borderRadius: '15%',width: '40px',height: '40px',}} onClick={() => handlePageChange(1)}> <img src={home} style={{ width: '20px', height: '20px' }} alt="home" /></button>
+        <button style={{ borderRadius: '15%',width: '40px',height: '40px',}} onClick={() => handlePageChange(currentPage - 1)}> <img src={prev} style={{ width: '20px', height: '20px' }} alt="prev" /></button>
         {/* <span>{`Page ${currentPage}`}</span> */}
-        <button onClick={() => handlePageChange(1)}>1;</button>
-        <button onClick={() => handlePageChange(1 + 1)}>2</button>
-        <button onClick={() => handlePageChange(2 + 1)}>3</button>
-        <button onClick={() => handlePageChange(3 + 1)}>4</button>
-        <button onClick={() => handlePageChange(4 + 1)}>5</button>
-        <button onClick={() => handlePageChange(currentPage + 1)}>Next &gt;</button>
-        <button onClick={() => handlePageChange(Math.ceil(allusers.length/itemsPerPage ))}>
-          Last &gt;&gt;
+        <button style={{ borderRadius: '15%',width: '40px',height: '40px',}} onClick={() => handlePageChange(1)}>1</button>
+        <button style={{ borderRadius: '15%',width: '40px',height: '40px',}} onClick={() => handlePageChange(1 + 1)}>2</button>
+        <button style={{ borderRadius: '15%',width: '40px',height: '40px',}} onClick={() => handlePageChange(2 + 1)}>3</button>
+        <button style={{ borderRadius: '15%',width: '40px',height: '40px',}} onClick={() => handlePageChange(3 + 1)}>4</button>
+        <button style={{ borderRadius: '15%',width: '40px',height: '40px',}} onClick={() => handlePageChange(4 + 1)}>5</button>
+        <button style={{ borderRadius: '15%',width: '40px',height: '40px',}} onClick={() => handlePageChange(currentPage + 1)}><img src={next} style={{ width: '20px', height: '20px' }} alt="next" /></button>
+        <button style={{ borderRadius: '15%',width: '40px',height: '40px',}} onClick={() => handlePageChange(Math.ceil(allusers.length/itemsPerPage ))}>
+        <img src={last} style={{ width: '20px', height: '20px' }} alt="last" />;
         </button>
       </div>
-      <button onClick={onDeleteSelected} className="delete-selected">
-        Delete Selected
+      <button   style={{ borderRadius: '15%',width: '40px',height: '40px', position: 'absolute',
+    top: 3,right: 67}} onClick={onDeleteSelected} className="delete-selected">
+      <img src={dele} style={{ width: '20px', height: '20px' }} alt="dele" />
       </button>
+       {/* Footer */}
+       <div style={{ position: 'relative', marginTop: '20px', borderTop: '1px solid #ccc' }}>
+        <span style={{ position: 'absolute', bottom: '40px', right: '10px' }}>
+          Current Page: {currentPage} of {Math.ceil(allusers.length/itemsPerPage )}
+        </span>
+        </div>
     </div>
   );
 };
