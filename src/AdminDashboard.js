@@ -65,8 +65,8 @@ const AdminDashboard = ({
 
   const handleSelectAll = async () => {
     const idsOnCurrentPage = users
-      .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-      .map(user => user.id);
+    .slice(0,itemsPerPage)
+    .map(user => user.id);
    for (const rowId of idsOnCurrentPage) {
     if (selectAllChecked) {
       // Deselect the row if "Select All" is checked
